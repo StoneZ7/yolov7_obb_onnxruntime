@@ -694,20 +694,14 @@ int main(int argc, char *argv[]) {
     int img_size = img_h * img_h * img_c;
     const float prob_threshold = 0.30f;
     const float nms_threshold = 0.60f;
-    const std::string model_path="/home/zl/yolov7c++/yolov7.onnx";
-    const char *image_path="/home/zl/yolov7c++/yolov7images/180824-150206CAM3_000015.jpg";
+    const std::string model_path="../yolov7.onnx";
+    const char *image_path="../yolov7images/180824-150206CAM3_000015.jpg";
     const std::string device_name="CPU";
     //读图
     cv::Mat src_img = cv::imread(image_path);//768 x 256 x 3
     std::vector<float> padding;
     cout<<"前处理开始"<<endl;
     cv::Mat image = letterbox(src_img, img_h, img_w, padding);
-    /*
-    cv::cvtColor(image, image, cv::COLOR_BGR2RGB);//768 x 256 x 3
-    cv::Mat img_RGB = image.clone(); 
-    img_RGB.convertTo(image, CV_32F,1.0 / 255.0); // 转换为浮点数格式,归一化到 [0, 1] 范围内
-    //创建一个4维的 Blob，其形状通常为 [N, C, H, W]
-    cv::Mat blobImage = cv::dnn::blobFromImage(img_RGB);*/
     cout<<"ort准备"<<endl;
     std::vector<Rotated_Detection> Dets;
     ort_process(model_path,image,Dets);
@@ -715,7 +709,7 @@ int main(int argc, char *argv[]) {
     std::vector<Rotated_Detection> det_result;
     yolo7_rotated_nms(Dets, iou_thres, nms_top_k_,det_result, false);
     cout<<"det_result维度:"<<det_result.size()<<endl;
-    std::string save_path = "/home/zl/yolov7c++/yolov7images/img1.jpg";  // img.jpg
+    std::string save_path = "../yolov7images/img1.jpg";  // img.jpg
     for (size_t i = 0; i < det_result.size(); ++i) {
        polygon_scale_coords({src_img.rows,src_img.cols},det_result[i],{768,256});
        polygon_plot_one_box(det_result[i], src_img);
