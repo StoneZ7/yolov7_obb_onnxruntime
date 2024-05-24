@@ -644,8 +644,6 @@ int main(int argc, char *argv[]) {
     int img_w = 256;
     int img_c = 3;
     int img_size = img_h * img_h * img_c;
-    const float prob_threshold = 0.30f;
-    const float nms_threshold = 0.60f;
     const std::string model_path="../yolov7.onnx";
     const char *image_path="../yolov7images/180824-150206CAM3_000015.jpg";
     const std::string device_name="CPU";
