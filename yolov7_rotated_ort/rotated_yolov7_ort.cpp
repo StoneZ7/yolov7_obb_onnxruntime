@@ -200,54 +200,6 @@ void yolo7_rotated_nms(std::vector<Rotated_Detection> &input,
     result.push_back(input[i]);
   }
 }
-void yolo7_rotated_nms1(std::vector<Rotated_Detection> &input,
-               float iou_threshold,
-               int top_k,
-               std::vector<Rotated_Detection> &result,
-               bool suppress) {
-  // sort order by score desc
-  std::stable_sort(input.begin(), input.end(), std::greater<Rotated_Detection>());
-    std::set<int> unique_labels;
-    for (const auto& det : input) {
-        unique_labels.insert(det.label);
-    }
-    std::vector<int> selected_indices;
-
-    // 根据类别进行处理
-    for (int unique_label : unique_labels) {
-        std::vector<Rotated_Detection> class_detections;
-        std::vector<int> class_indices;
-        for (size_t i = 0; i < input.size(); ++i) {
-            if (input[i].label == unique_label) {
-                class_detections.push_back(input[i]);
-                class_indices.push_back(i);
-            }
-        }
-       while (!class_detections.empty()) {
-            // 保存置信度最高的索引
-            selected_indices.push_back(class_indices[0]);
-            if (class_detections.size() == 1) break;
-
-            std::vector<Rotated_Detection> remaining_detections;
-            std::vector<int> remaining_indices;
-            for (size_t i = 1; i < class_detections.size(); ++i) {
-    std::vector<std::vector<float>> box={{class_detections[0].x1,class_detections[0].y1},{class_detections[0].x2,class_detections[0].y2},{class_detections[0].x3,class_detections[0].y3},{class_detections[0].x4,class_detections[0].y4}};
-      std::vector<std::vector<float>> box1={{class_detections[i].x1,class_detections[i].y1},{class_detections[i].x2,class_detections[i].y2},{class_detections[i].x3,class_detections[i].y3},{class_detections[i].x4,class_detections[i].y4}};
-      float res_iou = polygoniou(box,box1);
-                if (res_iou < iou_threshold) { // 设定 IoU 阈值
-                    remaining_detections.push_back(class_detections[i]);
-                    remaining_indices.push_back(class_indices[i]);
-                }
-            }
-            class_detections = std::move(remaining_detections);
-            class_indices = std::move(remaining_indices);
-        }
-    }
-    // 将最终选中的检测框存入 result
-    for (int idx : selected_indices) {
-        result.push_back(input[idx]);
-    }
-}
 
 void ort_process(const std::string& onnx_path_name, cv::Mat& image,std::vector<Rotated_Detection> &Dets) {
     vector<float> input_image_;
