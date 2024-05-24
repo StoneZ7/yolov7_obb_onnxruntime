@@ -5,4 +5,4 @@ This is a C++ ONNX Runtime deployment code for YOLOv7 parking spot corner detect
 ## Get Start
 * Install  opencv4 and onnxruntime
 * Edit CMakeLists.txt, set(ONNXRUNTIME_DIR "your_onnxruntime_path").
-* Next <br>`cd yolov7_rotated_ort` <br>`mkdir build && cd build` <br>`cmake ..`<br>`make`
+* Next <br>`cd yolov7_rotated_ort` <br>`mkdir build && cd build` <br>`cmake ..`<br>`make`<br>`./rotated_yolov7_ort`
